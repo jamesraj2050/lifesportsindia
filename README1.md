@@ -218,7 +218,7 @@ npm install next@15 eslint-config-next@15
 ### Gallery photos
 
 - `public/gallery/football/`*
-- `public/gallery/basketball/*`
+- `public/gallery/basketball/`*
 - `public/gallery/women/*`
 
 `src/content/gallery.ts` reads these folders at build-time (Node `fs`) and exports URL lists for the gallery page.
