@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { ContactForm } from "@/components/contact-form";
 import { Reveal } from "@/components/reveal";
 
 export default function ContactPage() {
@@ -22,30 +23,7 @@ export default function ContactPage() {
                 <h2 className="font-heading text-4xl font-semibold text-[color:var(--lsi-slate)] sm:text-5xl">
                   Send Message
                 </h2>
-                <form className="mt-8 grid gap-4">
-                  <input
-                    className="h-12 rounded-xl bg-white/60 px-4 text-sm ring-1 ring-black/10 placeholder:text-black/40 focus:outline-none focus:ring-2 focus:ring-[color:var(--lsi-terracotta)]"
-                    placeholder="Name"
-                    required
-                  />
-                  <input
-                    type="email"
-                    className="h-12 rounded-xl bg-white/60 px-4 text-sm ring-1 ring-black/10 placeholder:text-black/40 focus:outline-none focus:ring-2 focus:ring-[color:var(--lsi-terracotta)]"
-                    placeholder="Email"
-                    required
-                  />
-                  <textarea
-                    className="min-h-32 rounded-xl bg-white/60 px-4 py-3 text-sm ring-1 ring-black/10 placeholder:text-black/40 focus:outline-none focus:ring-2 focus:ring-[color:var(--lsi-terracotta)]"
-                    placeholder="Message"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    className="h-12 rounded-xl bg-[color:var(--lsi-bronze)] px-6 text-sm font-semibold text-white ring-1 ring-white/10 transition hover:brightness-110"
-                  >
-                    Send
-                  </button>
-                </form>
+                <ContactForm />
               </div>
             </Reveal>
 

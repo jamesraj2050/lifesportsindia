@@ -1,157 +1,181 @@
-# Life Sports India — UX Redesign (Work Summary so far)
+# Life Sports India — UX Redesign (Work Summary)
 
-This file is a **handoff/context document for agents** working in this repo.  
-Scope: **UX redesign only** (layout, typography, motion, imagery, spacing). **Content + information architecture** are preserved and/or updated only where the user explicitly provided replacement copy.
+Handoff document for agents and developers working in this repo.
 
----
-
-## Current state
-
-- **Framework**: Next.js **15.5.19**, React 19, TypeScript, App Router
-- **Styling**: Tailwind v4 + shadcn UI base styles
-- **Motion / UX**: Framer Motion + Lenis smooth scrolling
-- **Icons**: lucide-react
-- **Images**: Next/Image, local assets in `public/`
-- **Build**: `npm run build` succeeds
-- **Active feature branch**: `customer-update1` (customer-requested hero/logo/copy updates; **not merged to `main` yet** as of last edit)
+**Scope:** UX redesign only (layout, typography, motion, imagery, spacing). Page names, navigation, and messaging are preserved unless the user explicitly provided replacement copy.
 
 ---
 
-## Customer update 1 (`customer-update1`) — work summary for agents
+## Accomplishments summary
 
-> **Branch rule**: User requested all changes stay on `customer-update1` until told otherwise.  
-> **Do not edit the plan files** in `.cursor/plans/` when implementing.
+| Area | What was accomplished |
+|------|------------------------|
+| **Site shell** | Full Next.js 15 App Router site with 8 public pages, sticky header, dark footer, Lenis smooth scroll, Framer Motion reveals |
+| **Home hero** | Cinematic 4-image cycle, letter-by-letter taglines, LIFE **SPORTS** INDIA wordmark beat, preload gate, justified body copy |
+| **About Us** | Editorial layout, VMV panels, full-width Strategy section, Shillong/Bangalore/Punjab paragraph moved from Home |
+| **Growing Impact** | Recent Impact preserved; 4 event highlight cards with photos; Future Initiatives copy expanded |
+| **Partner With Us** | Support Mission section component; cleaned headings (no bronze underlines) |
+| **Gallery** | Masonry layout; desktop hover color; mobile center-in-view color sync |
+| **Contact** | Premium form UI (Name, Email, Message); removed placeholder intro copy |
+| **Brand** | LSI color tokens, Nunito Sans + Oswald, customer circular logo in header |
+| **Tooling** | shadcn UI, Tailwind v4, production build passes, ESLint skipped at build time |
+| **Deploy (Phase 0)** | UX work committed, merged to `main`, pushed to GitHub; live on Vercel at `lifesportsindia.vercel.app` |
+| **Database (Phase 1)** | Turso + Drizzle: `contacts` + `contact_messages`; newsletter, contact API, unsubscribe, `/admin` |
 
-### Git / branch
+---
+
+## Current state (Jun 24, 2026)
+
+| Item | Value |
+|------|--------|
+| **Repo path** | `/Users/apple/Documents/AI Business related/LifesportsIndia/web` |
+| **Git remote** | https://github.com/jamesraj2050/lifesportsindia |
+| **Feature branch** | `final-design-with-database` (Phase 1 — DB + admin) |
+| **Base branch** | `main` (UX redesign merged) |
+| **Framework** | Next.js **15.5.19**, React 19, TypeScript, App Router |
+| **Database** | Turso (libSQL) via Drizzle ORM |
+| **Build** | `npm run build` succeeds (20 routes incl. admin + API) |
+| **Live (Vercel)** | https://lifesportsindia.vercel.app (merge branch to deploy Phase 1) |
+| **Admin URL** | `/admin` (not in public nav; `noindex`) |
+| **Secrets** | `.env.local` — never committed; see `.env.example` |
+
+### Commit history on `main`
+
+```
+476854e UX redesign: cinematic hero, updated pages, and customer copy.
+0e2c0c2 Add mobile center-in-view color for gallery
+dea7fa6 Update Life Sports India website
+687ed70 Initial commit from Create Next App
+```
+
+---
+
+## Phase 0 — GitHub + Vercel deploy (completed)
+
+### Commands run
 
 ```bash
 cd "/Users/apple/Documents/AI Business related/LifesportsIndia/web"
-git branch --show-current   # should be customer-update1 while this work is in progress
+
+# Verify build before commit
+npm run build
+
+# Stage all UX changes (.env.local excluded by .gitignore)
+git add -A
+git status
+
+# Commit on feature branch
+git commit -m "$(cat <<'EOF'
+UX redesign: cinematic hero, updated pages, and customer copy.
+
+Ship customer-update1 work including hero animation, logo, gallery, impact/partner sections, and Next.js 15 config before Turso/admin phase.
+EOF
+)"
+
+# Merge to main and push
+git checkout main
+git pull origin main
+git merge customer-update1
+git push origin main
 ```
 
-- Branch created from `main` after gallery mobile color commit (`0e2c0c2`).
-- Customer-update1 changes were **uncommitted** at time of this README update — run `git status` to confirm.
+### What Phase 0 accomplished
 
-### Logo + header
+- 23 files committed on `customer-update1`, fast-forward merged into `main`
+- Pushed to GitHub → Vercel auto-deploy triggered (project already linked)
+- Verified new content on https://lifesportsindia.vercel.app (wordmark, About Strategy, Shillong copy, etc.)
+- **Action still needed:** point `lifesportsindia.org` DNS to Vercel (Vercel project → Settings → Domains)
 
-| Item | Detail |
-|---|---|
-| **File** | `public/brand/logo.png`, `src/components/site-header.tsx` |
-| **Change** | Replaced logo with customer-provided circular Life Sports India logo |
-| **Size** | Header logo container **44px → 66px** (~50% bigger); removed extra `scale-[1.18]` crop |
-
-### Home hero — copy changes
-
-| Item | Detail |
-|---|---|
-| **Files** | `src/components/home/home-hero.tsx`, `src/components/home/hero-cinematic.tsx` |
-| **3 animated phrases** | `Build Character` → **Developing Leaders**; `Create Community` → **Strengthening Communities**; `Inspire Hope` → **Building Character** (colors unchanged: white / terracotta / white) |
-| **Removed from hero body** | Repeated `Transforming Lives Through Sport` line; static `Developing Leaders . Strengthening Communities . Building Character` line |
-| **Moved to About Us** | Shillong / Bangalore / Punjab paragraph now under **Who We Are** in `src/app/about-us/page.tsx` |
-| **Removed from About hero** | Tagline under “About Us” h1 (`Developing Leaders . …`) |
-
-### Home hero — animation (images + phrases)
-
-| Item | Detail |
-|---|---|
-| **Preload gate** | `useHeroBackgroundsReady()` in `hero-cinematic.tsx` — animation **does not start** until all 4 hero backgrounds load: `hero-1.png`, `hero-2.png`, `hero-3.png`, `hero.jpg` |
-| **Phrase reveal** | Newest phrase reveals **letter-by-letter** over **1.35s** (synced to image crossfade); older phrases stay static |
-| **Image crossfade** | **1.35s**, ease `[0.21, 0.8, 0.24, 1]` — exported as `HERO_IMAGE_CROSSFADE_S` / `HERO_IMAGE_CROSSFADE_EASE` |
-| **Controller timing** | Word reveal starts **with** image index change (no extra `preWordMs` delay for words) |
-
-### Home hero — “LIFE SPORTS INDIA” wordmark
-
-| Item | Detail |
-|---|---|
-| **When shown** | `imageIndex === 3` (4th background: `hero.jpg`) |
-| **Font** | **Oswald** (`font-heading`), left-aligned; **SPORTS** in terracotta |
-| **Letter spacing** | `tracking-[0.06em]` / `sm:tracking-[0.07em]` |
-| **Text shadow** | `0 1px 2px rgb(0 0 0 / 0.85)` |
-| **Fade in (total 4s)** | **0.5s** at 0% opacity → **2s** fade 0→100% → **1.5s** hold at 100% (keyframes in `home-hero.tsx`) |
-| **Fade out** | **1.35s**, synced with image transition when cycle restarts (`imageIndex` 3→0) |
-| **Removed** | Slow opacity pulse loop; separate `taglineVisible` fade (was out of sync) |
-
-Constants in `hero-cinematic.tsx`:
-
-- `HERO_WORDMARK_FADE_IN_S = 4`
-- `HERO_WORDMARK_FADE_IN_DELAY_S = 0.5`
-- `HERO_WORDMARK_FADE_IN_DURATION_S = 2`
-
-### Home hero — overlays + readability
-
-| Item | Detail |
-|---|---|
-| **Slate wash** | `bg-[color:var(--lsi-slate)]/40` (was `/60`) — photo more visible |
-| **3 phrases shadow** | Same as body: `0 1px 2px` @ 85% + `0 2px 10px` @ 55% black |
-| **Body paragraph shadow** | Same dual text-shadow; text `text-[color:var(--lsi-ivory)]` (100%) |
-| **Body paragraph size** | `text-[1.05rem] leading-8` → `sm:text-[1.15rem] sm:leading-9` (reverted from brief 1-step bump) |
-| **Body paragraph layout** | Full-width `text-justify` with `[text-align-last:left]`; `hyphens-auto`, `text-pretty`, `lang="en"` |
-| **Heading spacing** | `h1` uses `mt-4 mb-6 sm:mt-6 sm:mb-8`; hero container `pt-3 sm:pt-4` (balanced gap above/below heading) |
-
-### Gallery (already on `main`)
-
-| Item | Detail |
-|---|---|
-| **File** | `src/components/gallery-masonry.tsx`, `src/app/gallery/page.tsx` |
-| **Mobile** | Image **nearest viewport center** auto-decolorizes; others stay grayscale |
-| **Desktop** | Hover-to-color unchanged |
-
-### Files touched on `customer-update1`
-
-- `public/brand/logo.png`
-- `src/components/site-header.tsx`
-- `src/components/home/hero-cinematic.tsx` — preload, letter animation, wordmark, overlay, timing constants
-- `src/components/home/home-hero.tsx` — copy, spacing, wordmark fade keyframes, body paragraph
-- `src/app/about-us/page.tsx` — moved paragraph; removed hero tagline; Strategy section; 3 VMV rows
-- `src/components/about/strategy-section.tsx`
-- `src/app/growing-impact/page.tsx` — 4 impact event cards
-- `src/content/growing-impact-events.ts`
-- `src/components/growing-impact/impact-event-card.tsx`
-- `public/photos/impact/*.png` (4 event photos)
-
-### Quick revert commands (if customer dislikes a change)
-
-**Wordmark styling only** (restore Nunito + centered badge look):
+### Smoke-test after deploy
 
 ```bash
-git checkout -- src/components/home/hero-cinematic.tsx src/components/home/home-hero.tsx
-```
-
-**Single file** (example — body paragraph only):
-
-```bash
-git checkout -- src/components/home/home-hero.tsx
-```
-
-**Entire branch work** (after commit, use commit hash):
-
-```bash
-git log --oneline -5
-git revert <commit-hash>
+curl -sL "https://lifesportsindia.vercel.app/" | grep -oE 'LIFE SPORTS INDIA|Developing Leaders' | sort -u
+curl -sL "https://lifesportsindia.vercel.app/about-us" | grep -oE 'OUR STRATEGY|Shillong' | head -3
 ```
 
 ---
 
-## Folder rename note (LifesportsOrg → LifesportsIndia)
+## Files affected (master list)
 
-- This project was originally worked on under a folder named `LifesportsOrg` and later renamed to `LifesportsIndia`.
-- If you see any old absolute paths in past notes/scripts, update them to the new folder name.
+### Config + dependencies
 
-Example rename command:
+| File | Change |
+|------|--------|
+| `package.json` | Next 15, Drizzle/Turso deps added (DB not wired yet), UX libraries |
+| `package-lock.json` | Lockfile updates |
+| `next.config.ts` → `next.config.js` | Migrated to JS config; `eslint.ignoreDuringBuilds: true` |
+| `components.json` | shadcn UI config |
+| `eslint.config.mjs` | Flat ESLint config |
+| `tsconfig.json` | TypeScript paths |
+| `.gitignore` | Standard Next + `.env*` + `.vercel` |
 
-```bash
-mv "LifesportsOrg" "LifesportsIndia"
-```
+### App pages (`src/app/`)
+
+| File | Change |
+|------|--------|
+| `layout.tsx` | Fonts (Nunito Sans, Oswald), smooth scroll wrapper |
+| `globals.css` | LSI brand tokens (`--lsi-slate`, `--lsi-bronze`, `--lsi-terracotta`, `--lsi-ivory`) |
+| `page.tsx` | Home: cinematic hero + image-only mosaic (lg/xl tile heights) |
+| `about-us/page.tsx` | VMV rows, Strategy section, Shillong paragraph, removed hero tagline |
+| `why-sport-matters/page.tsx` | Story layout, Mandela quote (reduced bold/size) |
+| `what-we-do/page.tsx` | Program cards, exact user copy, no heading underlines |
+| `growing-impact/page.tsx` | 4 impact event cards, Future Initiatives, no underlines |
+| `gallery/page.tsx` | Masonry gallery page |
+| `partner-with-us/page.tsx` | Support Mission section, no heading underlines |
+| `contact-us/page.tsx` | Contact form UI, removed placeholder intro + underlines |
+
+### Components (`src/components/`)
+
+| File | Change |
+|------|--------|
+| `site-header.tsx` | Sticky header, larger logo (66px), menu hover slate+white |
+| `site-footer.tsx` | Dark footer, nav, newsletter form (UI only) |
+| `site-nav.ts` | Nav link labels (unchanged IA) |
+| `smooth-scroll.tsx` | Lenis + resize on load/resize/ResizeObserver |
+| `reveal.tsx` | Framer Motion scroll reveals |
+| `gallery-masonry.tsx` | Masonry + mobile center-in-view color |
+| `home/home-hero.tsx` | Hero copy, spacing, wordmark fade keyframes, body paragraph |
+| `home/hero-cinematic.tsx` | 4-image cycle, preload, letter animation, timing constants |
+| `about/strategy-section.tsx` | **New** — full-width Strategy block |
+| `growing-impact/impact-event-card.tsx` | **New** — event photo + caption card |
+| `partner/support-mission-section.tsx` | **New** — Partner support mission content |
+| `ui/button.tsx` | shadcn Button |
+
+### Content (`src/content/`)
+
+| File | Change |
+|------|--------|
+| `gallery.ts` | Build-time scan of `public/gallery/*` folders |
+| `growing-impact-events.ts` | **New** — 4 Recent Impact event entries |
+
+### Public assets (`public/`)
+
+| Path | Change |
+|------|--------|
+| `brand/logo.png` | Customer circular LSI logo |
+| `photos/hero.jpg`, `hero-1.png`, `hero-2.png`, `hero-3.png` | Cinematic hero backgrounds |
+| `photos/mosaic-1.jpg` … `mosaic-3.jpg` | Home mosaic strip |
+| `photos/about-hero.jpg`, `about-split.jpg` | About page images |
+| `photos/impact/*.png` | **4 new** — Growing Impact event photos |
+| `gallery/football/*`, `gallery/basketball/*`, `gallery/women/*` | Gallery image libraries |
+
+### Documentation
+
+| File | Change |
+|------|--------|
+| `README1.md` | This handoff document |
+| `README.md` | Default Create Next App readme |
+| `AGENTS.md`, `CLAUDE.md` | Agent pointers |
 
 ---
 
-## What was implemented
+## Feature detail — what was built
 
 ### Pages (routes)
 
-Navigation labels and ordering are preserved:
+Navigation labels and order preserved (admin **not** in public nav):
 
-- `/` (Home)
+- `/` — Home
 - `/about-us`
 - `/why-sport-matters`
 - `/what-we-do`
@@ -160,314 +184,303 @@ Navigation labels and ordering are preserved:
 - `/partner-with-us`
 - `/contact-us`
 
-### Home (`src/app/page.tsx` + `src/components/home/home-hero.tsx`)
+### Home
 
-- **Hero**: cinematic **4-image** background cycle + Slate overlay + big heading
-- **Animated tagline**: Developing Leaders / Strengthening Communities / Building Character (letter-by-letter, synced to images)
-- **Wordmark beat**: LIFE **SPORTS** INDIA on 4th image (`hero.jpg`)
-- **Body copy**: single justified paragraph (Shillong line **moved to About Us**)
-- **Under-banner section**: **image-only mosaic** (no text on images) as requested
+- **Hero:** 4-image cinematic background (`hero-1.png` → `hero-3.png` → `hero.jpg`)
+- **Taglines:** Developing Leaders / Strengthening Communities / Building Character (letter-by-letter, 1.35s, synced to crossfade)
+- **Wordmark:** LIFE **SPORTS** INDIA on 4th image (Oswald, terracotta SPORTS, 4s fade-in)
+- **Preload:** animation waits until all 4 backgrounds load (`useHeroBackgroundsReady`)
+- **Body:** single justified paragraph; Shillong line moved to About
+- **Mosaic:** image-only tiles below hero (`lg:h-80` / `xl:h-96`)
 
-### About Us (`src/app/about-us/page.tsx`)
+**Hero timing constants** (`hero-cinematic.tsx`):
 
-- Editorial split layout (image + text)
-- Premium 4 panels: Vision / Mission / Values / Strategy (Slate background, hover lift)
-- **Who We Are** includes Shillong / Bangalore / Punjab paragraph (moved from Home hero)
-- Hero overlay tagline **removed** (no duplicate “Developing Leaders …” under h1)
+- `HERO_IMAGE_CROSSFADE_S = 1.35`
+- `HERO_WORDMARK_FADE_IN_S = 4`, `HERO_WORDMARK_FADE_IN_DELAY_S = 0.5`, `HERO_WORDMARK_FADE_IN_DURATION_S = 2`
 
-### Why Sport Matters (`src/app/why-sport-matters/page.tsx`)
+### About Us
 
-- Storytelling layout, dark section rhythm
-- Mandela quote block
+- Editorial split layout; photo stretch + `md:scale-110`
+- VMV: 3 stacked rows (Vision, Mission, Values); removed LSI labels + accent underlines
+- **Strategy:** full-width `strategy-section.tsx` below photo block
+- **Who We Are:** Shillong / Bangalore / Punjab paragraph (from Home hero)
+- Hero tagline under h1 removed
 
-### What We Do (`src/app/what-we-do/page.tsx`)
+### Why Sport Matters
 
-- Section label is **“What We Do”** (removes “initiatives” language)
-- Uses the **exact program copy** provided by the user (Tournaments, Clinics, etc.)
+- Storytelling sections, dark rhythm
+- Mandela quote: smaller size, less bold
 
-### Growing Impact (`src/app/growing-impact/page.tsx`)
+### What We Do
 
-- “Recent Impact” section preserved
-- **4 event highlight cards** below Recent Impact (`md:grid-cols-2`): image + caption per event
-- Data: `src/content/growing-impact-events.ts`; images in `public/photos/impact/`
-- Component: `src/components/growing-impact/impact-event-card.tsx`
-- Adds **“Future Initiatives”** title + the user-provided expanded copy for:
-  - Women in Sports
-  - Rural Development Program
-  - Career & Skill Development Program
+- Label **“What We Do”** (no “initiatives” wording)
+- User-provided program copy; heading underlines removed
 
-### Gallery (`src/app/gallery/page.tsx`)
+### Growing Impact
 
-- **Masonry layout** (CSS columns) via `src/components/gallery-masonry.tsx`
-- **Desktop hover**: grayscale → color + gentle zoom
-- **Mobile**: image **closest to screen center** becomes color; others grayscale (scroll-synced)
-- Auto-loads image lists from `public/gallery/` via `src/content/gallery.ts`
+- Recent Impact bullets preserved
+- **4 event cards** (2×2 grid): Isaiah/Sunny, Brandon Slay, Wesley Fluellen, Chandigarh University
+- Future Initiatives: Women in Sports, Rural Development, Career & Skill Development
+- Removed NEXT label + card underlines
 
-### Shared layout
+### Partner With Us
 
-- **Header** (`src/components/site-header.tsx`):
-  - Transparent on hero, sticky, blur after scroll
-  - Mobile menu (drawer-like section)
-  - Uses logo from `public/brand/logo.png`
-- **Footer** (`src/components/site-footer.tsx`):
-  - Dark Slate footer, nav links, newsletter form, contact links
+- `SupportMissionSection` component
+- Heading underlines removed
 
-### Brand + typography tokens
+### Gallery
 
-- Brand colors in `src/app/globals.css`:
-  - `--lsi-slate: #163444`
-  - `--lsi-bronze: #983e18`
-  - `--lsi-terracotta: #df9869`
-  - `--lsi-ivory: #efe9d4`
-  - `--lsi-ink: #0b0f12`
-- Fonts set in `src/app/layout.tsx`:
-  - Body: **Nunito Sans**
-  - Heading: **Oswald** (placeholder “sharp” condensed heading).  
-  Note: user requested “sharp like allstarsacademy”; swap later once the exact font/source is confirmed.
+- CSS-column masonry via `gallery-masonry.tsx`
+- **Desktop:** hover grayscale → color + zoom
+- **Mobile:** image nearest viewport center auto-colorizes
+- Images from `public/gallery/` via `gallery.ts`
+
+### Contact Us
+
+- Name / Email / Message form (UI only — not saved to DB yet)
+- Removed *“Design should feel premium and minimal.”* intro
+- Removed underlines under section headings
+
+### Header + footer
+
+- **Header:** transparent on hero → sticky blur; logo 66px; nav hover slate bg + white text
+- **Footer:** newsletter field (UI only), contact links, dark slate styling
 
 ---
 
-## Key commands (and why)
+## Key commands (full runbook)
 
-> Excludes Node.js installation commands by request.  
-> **Note**: Terminal history wasn’t available in the current Cursor terminal logs, so this is a **reconstructed runbook** based on the repo state + packages/assets present on disk.
+> Excludes Node.js installation. Paths use the `LifesportsIndia/web` folder.
 
-### Bootstrap the Next.js app (one-time)
+### Project bootstrap (one-time)
 
 ```bash
 cd "/Users/apple/Documents/AI Business related/LifesportsIndia"
 npx create-next-app@latest web --ts --tailwind --eslint --app --src-dir --use-npm
-```
-
-- **Action**: creates a Next.js App Router project in `web/` (this repo matches that structure).
-
-### Enter the app folder
-
-```bash
-cd "/Users/apple/Documents/AI Business related/LifesportsIndia/web"
-```
-
-- **Action**: moves into the Next.js app (the git repo is inside `web/`).
-
-### Install dependencies
-
-```bash
+cd web
 npm install
-```
-
-- **Action**: installs `node_modules` from `package-lock.json`.
-
-### Initialize shadcn UI (one-time)
-
-```bash
 npx shadcn@latest init --defaults --base radix --yes --css-variables --no-rtl --force
-```
-
-- **Action**: writes `components.json`, wires shadcn to Tailwind v4 globals, and enables adding shadcn components consistently.
-
-### Add the shadcn `Button` component
-
-```bash
 npx shadcn@latest add button --yes
-```
-
-- **Action**: generates `src/components/ui/button.tsx` used across the site.
-
-### Add UX libraries (motion/scroll/icons)
-
-```bash
 npm install framer-motion lenis lucide-react react-countup
-```
-
-- **Action**: adds motion primitives (Framer Motion), smooth scroll (Lenis), icons (Lucide), and count-up support.
-
-### Run the dev server
-
-```bash
-npm run dev
-```
-
-- **Action**: starts local development server (usually at `http://localhost:3000`).
-
-### Lint (optional)
-
-```bash
-npm run lint
-```
-
-- **Action**: runs ESLint (note build ignores ESLint; see “ESLint during build” below).
-
-### Production build (TypeScript validation)
-
-```bash
-npm run build
-```
-
-- **Action**: validates types and ensures the app can ship (Next production build).
-
-### Start the production server (optional)
-
-```bash
-npm run start
-```
-
-- **Action**: serves the production build locally (useful to verify prod behavior).
-
-### Upgrade/downgrade Next to v15 (when required)
-
-```bash
 npm install next@15 eslint-config-next@15
 ```
 
-- **Action**: aligns the stack to the requirement: **Next.js 15** (only needed if you drift versions).
-
----
-
-## Asset setup (what exists on disk)
-
-### Logo
-
-- `public/brand/logo.png` (copied from workspace `Logo.png`)
-
-### Home/About photos (hero/mosaic/splits)
-
-- `public/photos/hero.jpg`
-- `public/photos/mosaic-1.jpg`
-- `public/photos/mosaic-2.jpg`
-- `public/photos/mosaic-3.jpg`
-- `public/photos/about-hero.jpg`
-- `public/photos/about-split.jpg`
-
-### Gallery photos
-
-- `public/gallery/football/`*
-- `public/gallery/basketball/`*
-- `public/gallery/women/`*
-
-`src/content/gallery.ts` reads these folders at build-time (Node `fs`) and exports URL lists for the gallery page.
-
-### Asset folder creation + copy commands (reproducible)
-
-If you’re redoing assets from the project root folder (the one that contains `Logo.png` and the `images/` folder), these are the typical commands:
+### Daily development
 
 ```bash
-mkdir -p "web/public/brand" "web/public/photos" "web/public/gallery/football" "web/public/gallery/basketball" "web/public/gallery/women"
+cd "/Users/apple/Documents/AI Business related/LifesportsIndia/web"
+npm run dev          # http://localhost:3000
+npm run lint         # optional; build skips ESLint
+npm run build        # production build + typecheck
+npm run start        # serve production build locally
+```
+
+### Git inspection
+
+```bash
+cd "/Users/apple/Documents/AI Business related/LifesportsIndia/web"
+git branch --show-current
+git status
+git log --oneline -5
+git diff --stat main...HEAD
+```
+
+### Asset setup (reproducible)
+
+```bash
+mkdir -p "web/public/brand" "web/public/photos" "web/public/photos/impact" \
+         "web/public/gallery/football" "web/public/gallery/basketball" "web/public/gallery/women"
 cp "Logo.png" "web/public/brand/logo.png"
 cp -R "images/Football Pictures for the gallery/"* "web/public/gallery/football/"
 cp -R "images/Gallery Basketball/"* "web/public/gallery/basketball/"
 cp -R "images/Women in sports/"* "web/public/gallery/women/"
 ```
 
-- **Action**: creates the required `public/` folders and copies logo + gallery images into the `web/` app.
-
----
-
-## Notable implementation details / gotchas
-
-### ESLint during build
-
-In Next 15, the repo hit ESLint flat-config resolution issues. To keep builds unblocked:
-
-- `next.config.ts` sets:
-  - `eslint.ignoreDuringBuilds = true`
-
-Linting can still be run separately with `npm run lint`.
-
-### Lenis options typing
-
-Lenis v1 types do not include `smoothTouch`. The smooth scroll wrapper removed that option to satisfy TypeScript:
-
-- `src/components/smooth-scroll.tsx`
-
----
-
-## Files to look at first
-
-- **Brand + fonts**: `src/app/layout.tsx`, `src/app/globals.css`
-- **Nav structure**: `src/components/site-nav.ts`
-- **Header/Footer**: `src/components/site-header.tsx`, `src/components/site-footer.tsx`
-- **Home hero (animation + copy)**: `src/components/home/home-hero.tsx`, `src/components/home/hero-cinematic.tsx`
-- **Motion wrapper**: `src/components/reveal.tsx`, `src/components/smooth-scroll.tsx`
-- **Gallery content**: `src/content/gallery.ts`, `src/app/gallery/page.tsx`, `src/components/gallery-masonry.tsx`
-
----
-
-## Command log — after last README1.md update (`customer-update1`)
-
-> **Cut-off**: commands run **after** the **Customer update 1 — work summary for agents** section was first added to this file (user request: *“add the work done with summary to readme1.md”*).  
-> **Branch**: all work stayed on `customer-update1`. **No new commits** in this window (still uncommitted as of this append).  
-> **Note**: many UI changes in this window were applied via direct file edits (no shell); only **terminal commands** are listed below.
-
-### Git / inspection
-
-```bash
-cd "/Users/apple/Documents/AI Business related/LifesportsIndia/web"
-git branch --show-current && git diff --stat main...HEAD 2>/dev/null || git diff --stat
-```
-
-- **Action**: confirmed active branch `customer-update1` and summarized which files differ from `main` before refreshing README1.
-
-```bash
-git status --short && git log main..HEAD --oneline 2>/dev/null; git log -3 --oneline
-```
-
-- **Action**: listed uncommitted modified/untracked files and recent commits (`0e2c0c2` gallery mobile color still latest on branch).
-
-```bash
-git branch --show-current && git status --short && git log --oneline -5
-```
-
-- **Action**: re-checked branch, working tree, and commit history before appending this command log.
-
-### Assets — Growing Impact event photos
+### Growing Impact event photos (customer assets)
 
 ```bash
 mkdir -p "/Users/apple/Documents/AI Business related/LifesportsIndia/web/public/photos/impact"
+
+cp "<source>/Isaiah_Kharmawphlang-....png" \
+   "web/public/photos/impact/isaiah-kharmawphlang-sunny-mawlong.png"
+cp "<source>/Brandon_Slay-....png" \
+   "web/public/photos/impact/brandon-slay.png"
+cp "<source>/Wesley_Fluellen2004-....png" \
+   "web/public/photos/impact/wesley-fluellen.png"
+cp "<source>/Chandigarh_University-....png" \
+   "web/public/photos/impact/chandigarh-university-ezek.png"
+
+ls -la "web/public/photos/impact/"
 ```
 
-- **Action**: created folder for Growing Impact event images.
-
-```bash
-cp "/Users/apple/.cursor/projects/Users-apple-Documents-AI-Business-related-LifesportsIndia/assets/Isaiah_Kharmawphlang-32cae88d-0aa8-4ea3-9a23-e27fd40a2825.png" \
-   "/Users/apple/Documents/AI Business related/LifesportsIndia/web/public/photos/impact/isaiah-kharmawphlang-sunny-mawlong.png"
-cp "/Users/apple/.cursor/projects/Users-apple-Documents-AI-Business-related-LifesportsIndia/assets/Brandon_Slay-5a80921f-bf8b-4df9-9e73-52beb531f921.png" \
-   "/Users/apple/Documents/AI Business related/LifesportsIndia/web/public/photos/impact/brandon-slay.png"
-cp "/Users/apple/.cursor/projects/Users-apple-Documents-AI-Business-related-LifesportsIndia/assets/Wesley_Fluellen2004-9349a12e-05b2-4562-9cd0-90dd5485f3a2.png" \
-   "/Users/apple/Documents/AI Business related/LifesportsIndia/web/public/photos/impact/wesley-fluellen.png"
-cp "/Users/apple/.cursor/projects/Users-apple-Documents-AI-Business-related-LifesportsIndia/assets/Chandigarh_University-f1eeb618-7ca0-430b-b8f0-7ec4f6002baa.png" \
-   "/Users/apple/Documents/AI Business related/LifesportsIndia/web/public/photos/impact/chandigarh-university-ezek.png"
-```
-
-- **Action**: saved 4 customer-provided photos with descriptive filenames (Isaiah/Sunny, Brandon Slay, Wesley Fluellen, Ezek at Chandigarh University).
-
-```bash
-ls -la "/Users/apple/Documents/AI Business related/LifesportsIndia/web/public/photos/impact/"
-```
-
-- **Action**: verified all 4 PNGs exist and sizes look correct (~113–171 KB each).
-
-### Build verification
+### Clean rebuild (if `.next` cache corrupt)
 
 ```bash
 cd "/Users/apple/Documents/AI Business related/LifesportsIndia/web"
+rm -rf .next
 npm run build
 ```
 
-- **Action**: production build after Growing Impact + other `customer-update1` edits; **compiled successfully**, types valid, 12 static pages generated, **exit code 0** (run ~Jun 21–22 2026 session).
+### Revert helpers
 
-### Work completed in this window (no shell — for agent context)
+```bash
+# Single file
+git checkout -- src/components/home/home-hero.tsx
 
-| Area | Change |
-|---|---|
-| **Home (large screens)** | `lg:min-h-[80vh]` on hero; mosaic tiles `lg:h-80` / `xl:h-96` |
-| **Home hero image 4** | `objectPositionLg: 50% 18%` + gentler Ken Burns on lg for `hero.jpg` |
-| **About Us** | Strategy moved to full-width section below photo; VMV = 3 stacked rows; removed LSI labels + accent lines; photo stretch + `md:scale-110`; VMV body `text-base` |
-| **Growing Impact** | 4 event cards (2×2 grid); content in `growing-impact-events.ts`; removed **NEXT** label + card underlines in Future Initiatives |
-| **Contact** | Removed intro *“Design should feel premium and minimal.”*; removed underlines under Send Message / Information headings |
+# Hero wordmark styling only
+git checkout -- src/components/home/hero-cinematic.tsx src/components/home/home-hero.tsx
 
-### Files touched in this window (add to list above)
+# Revert a committed change
+git log --oneline -5
+git revert <commit-hash>
+```
 
-- `src/app/page.tsx` — mosaic heights on lg/xl
-- `src/app/contact-us/page.tsx` — heading underlines + intro removed
-- `public/photos/impact/*.png` (4 new)
+---
 
+## Notable gotchas
+
+| Issue | Resolution |
+|-------|------------|
+| ESLint breaks `next build` | `next.config.js` sets `eslint.ignoreDuringBuilds: true`; run `npm run lint` separately |
+| Lenis `smoothTouch` not in types | Removed from `smooth-scroll.tsx` |
+| Gallery scroll too short | Lenis `resize()` on load, window resize, and `ResizeObserver` |
+| Hero prerender error | Hero controller in client component `home-hero.tsx` |
+| `next.config.ts` on old Next 9 | Upgraded to Next 15; config is now `next.config.js` |
+| Local build flaky (ECONNRESET / ENOENT) | `rm -rf .next && npm run build`; Vercel CI is authoritative for deploy |
+| Admin auth in Edge middleware | Auth runs in Node via `requireAdmin()` on protected pages; middleware only sets `noindex` |
+| Drizzle Kit `push` command | Upgraded `drizzle-kit` to latest; use `npm run db:push` with env loaded |
+
+---
+
+## Files to open first (for agents)
+
+- `src/app/layout.tsx`, `src/app/globals.css` — fonts + brand tokens
+- `src/components/site-nav.ts` — nav structure
+- `src/components/site-header.tsx`, `src/components/site-footer.tsx`
+- `src/components/home/home-hero.tsx`, `src/components/home/hero-cinematic.tsx`
+- `src/components/smooth-scroll.tsx`, `src/components/reveal.tsx`
+- `src/content/gallery.ts`, `src/app/gallery/page.tsx`, `src/components/gallery-masonry.tsx`
+
+---
+
+## Phase 1 — Database + admin (implemented on `final-design-with-database`)
+
+### Branch + deploy commands
+
+```bash
+cd "/Users/apple/Documents/AI Business related/LifesportsIndia/web"
+
+# Create branch (Git disallows spaces — use hyphens)
+git checkout main
+git pull origin main
+git checkout -b final-design-with-database
+
+# Apply schema to Turso (requires .env.local)
+set -a && source .env.local && set +a
+npm run db:push
+
+# Build and push
+npm run build
+git add -A
+git commit -m "Add Turso database, newsletter, contact forms, and admin panel."
+git push -u origin final-design-with-database
+```
+
+Merge to `main` when ready; set env vars in **Vercel → Settings → Environment Variables** before production deploy.
+
+### Environment variables
+
+Copy `.env.example` → `.env.local`. Required keys:
+
+```
+DATABASE_URL=          # Turso database URL (or TURSO_DATABASE_URL)
+DATABASE_AUTH_TOKEN=   # Turso auth token (or TURSO_AUTH_TOKEN)
+ADMIN_USERNAME=Admin
+ADMIN_PASSWORD=        # e.g. Lifesportsindia@123
+ADMIN_SESSION_SECRET=  # random string (openssl rand -base64 32)
+```
+
+### Data model (Option B hybrid)
+
+**`contacts`** — one row per email (`email_id` PK)
+
+- `subscription`: `Yes` | `No` (newsletter)
+- `unsubscribe_token`: unique token for email footer links
+- `name`, `message`: latest contact snapshot
+- `subscribed_at`, `unsubscribed_at`, `created_at`, `updated_at`
+
+**`contact_messages`** — full history (never overwritten)
+
+- `id`, `email_id`, `name`, `message`, `created_at`
+
+### API routes
+
+| Route | Method | Purpose |
+|-------|--------|---------|
+| `/api/newsletter` | POST | Subscribe email; idempotent if already `Yes` |
+| `/api/contact` | POST | Save message + append history |
+| `/api/admin/login` | POST | Admin session cookie |
+| `/api/admin/logout` | POST | Clear session |
+
+### Public pages
+
+| Route | Purpose |
+|-------|---------|
+| `/unsubscribe?token=...` | One-click unsubscribe → `Subscription=No` |
+
+Newsletter footer template:
+
+```text
+Unsubscribe: https://lifesportsindia.org/unsubscribe?token=UNIQUE_TOKEN_PER_SUBSCRIBER
+```
+
+### Admin pages (login required)
+
+| Route | Purpose |
+|-------|---------|
+| `/admin` | Login form |
+| `/admin/newsletter` | Active subscribers; semicolon copy export |
+| `/admin/messages` | Contact history, search + pagination |
+
+### Phase 1 files added/changed
+
+| File | Purpose |
+|------|---------|
+| `drizzle.config.ts` | Drizzle Kit + Turso config |
+| `src/db/schema.ts` | `contacts`, `contact_messages` tables |
+| `src/db/client.ts` | Turso/libSQL client |
+| `src/lib/validation.ts` | Email/name/message limits + honeypot |
+| `src/lib/rate-limit.ts` | In-memory rate limiting |
+| `src/lib/tokens.ts` | Unsubscribe token generation |
+| `src/lib/auth.ts` | Admin session + credential check |
+| `src/lib/require-admin.ts` | Server-side route guard |
+| `src/lib/unsubscribe.ts` | Unsubscribe logic |
+| `src/middleware.ts` | `X-Robots-Tag: noindex` for admin/unsubscribe |
+| `src/app/api/newsletter/route.ts` | Newsletter POST |
+| `src/app/api/contact/route.ts` | Contact POST |
+| `src/app/api/admin/login/route.ts` | Login POST |
+| `src/app/api/admin/logout/route.ts` | Logout POST |
+| `src/app/unsubscribe/page.tsx` | Unsubscribe confirmation |
+| `src/app/admin/**` | Login, newsletter, messages UI |
+| `src/components/admin/**` | Admin nav, login form, export |
+| `src/components/contact-form.tsx` | Wired contact form |
+| `src/components/site-footer.tsx` | Wired newsletter form |
+| `.env.example` | Env template (no secrets) |
+| `package.json` | `db:push`, `db:generate`, `db:studio` scripts |
+
+### Newsletter business rules
+
+- Subscribe sets `Subscription=Yes`; re-subscribe while `Yes` is idempotent (token unchanged)
+- Contact form **never** changes `Subscription`
+- Unsubscribe link sets `Subscription=No`; user may re-subscribe via footer later
+- Admin export includes only `Subscription=Yes` rows
+
+---
+
+## Folder rename note
+
+Project folder was renamed from `LifesportsOrg` to `LifesportsIndia`. Git repo lives inside `web/`.
+
+```bash
+mv "LifesportsOrg" "LifesportsIndia"
+```
