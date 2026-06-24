@@ -4,13 +4,36 @@ import { Reveal } from "@/components/reveal";
 import { GalleryMasonry } from "@/components/gallery-masonry";
 import { gallery } from "@/content/gallery";
 
-export default function GalleryPage() {
-  const images = [
-    ...gallery.football,
-    ...gallery.basketball,
-    ...gallery.women,
-  ] as const;
+function GallerySection({
+  title,
+  images,
+  priorityCount = 0,
+  revealDelay = 0,
+}: {
+  title: string;
+  images: readonly string[];
+  priorityCount?: number;
+  revealDelay?: number;
+}) {
+  if (images.length === 0) return null;
 
+  return (
+    <div className="mt-14 first:mt-0 sm:mt-16">
+      <Reveal delay={revealDelay}>
+        <h2 className="font-heading text-4xl font-semibold text-[color:var(--lsi-slate)] sm:text-5xl">
+          {title}
+        </h2>
+      </Reveal>
+      <Reveal delay={revealDelay + 0.06}>
+        <div className="mt-8 rounded-3xl border border-black/10 bg-[color:rgb(255_255_255_/_.20)] p-4 shadow-[0_26px_80px_rgba(0,0,0,0.08)] backdrop-blur-sm sm:mt-10 sm:p-6">
+          <GalleryMasonry images={images} priorityCount={priorityCount} />
+        </div>
+      </Reveal>
+    </div>
+  );
+}
+
+export default function GalleryPage() {
   return (
     <div className="min-h-full">
       <SiteHeader />
@@ -21,23 +44,27 @@ export default function GalleryPage() {
               Gallery
             </h1>
           </Reveal>
-          <Reveal delay={0.08}>
-            <p className="mt-6 max-w-2xl text-base leading-7 text-black/75 sm:text-[1.05rem] sm:leading-8">
-              Football focused. Documentary, warm, and real.
-            </p>
-          </Reveal>
         </section>
 
         <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 sm:pb-24">
-          <Reveal>
-            <div className="rounded-3xl border border-black/10 bg-[color:rgb(255_255_255_/_.20)] p-4 shadow-[0_26px_80px_rgba(0,0,0,0.08)] backdrop-blur-sm sm:p-6">
-              <GalleryMasonry images={images} priorityCount={3} />
-            </div>
-          </Reveal>
+          <GallerySection
+            title="Football Gallery"
+            images={gallery.football}
+            priorityCount={3}
+          />
+          <GallerySection
+            title="Basketball Gallery"
+            images={gallery.basketball}
+            revealDelay={0.04}
+          />
+          <GallerySection
+            title="Women in Sports Gallery"
+            images={gallery.women}
+            revealDelay={0.08}
+          />
         </section>
       </main>
       <SiteFooter />
     </div>
   );
 }
-

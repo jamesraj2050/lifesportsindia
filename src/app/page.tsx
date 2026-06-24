@@ -16,7 +16,7 @@ export default function Home() {
         <section className="relative mx-auto -mt-14 max-w-6xl px-4 sm:px-6">
           <Reveal>
             <div className="grid gap-4 md:grid-cols-12">
-              <div className="relative h-56 overflow-hidden rounded-2xl ring-1 ring-black/10 md:col-span-5 md:h-72">
+              <div className="relative h-56 overflow-hidden rounded-2xl ring-1 ring-black/10 md:col-span-5 md:h-72 lg:h-80 xl:h-96">
                 <Image
                   src="/photos/mosaic-1.jpg"
                   alt=""
@@ -25,7 +25,7 @@ export default function Home() {
                   sizes="(min-width: 768px) 40vw, 100vw"
                 />
               </div>
-              <div className="relative h-56 overflow-hidden rounded-2xl ring-1 ring-black/10 md:col-span-4 md:h-72">
+              <div className="relative h-56 overflow-hidden rounded-2xl ring-1 ring-black/10 md:col-span-4 md:h-72 lg:h-80 xl:h-96">
                 <Image
                   src="/photos/mosaic-2.jpg"
                   alt=""
@@ -34,7 +34,7 @@ export default function Home() {
                   sizes="(min-width: 768px) 30vw, 100vw"
                 />
               </div>
-              <div className="relative h-56 overflow-hidden rounded-2xl ring-1 ring-black/10 md:col-span-3 md:h-72">
+              <div className="relative h-56 overflow-hidden rounded-2xl ring-1 ring-black/10 md:col-span-3 md:h-72 lg:h-80 xl:h-96">
                 <Image
                   src="/photos/mosaic-3.jpg"
                   alt=""

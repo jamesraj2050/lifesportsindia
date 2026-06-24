@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Reveal } from "@/components/reveal";
+import { SupportMissionSection } from "@/components/partner/support-mission-section";
 
 export default function PartnerWithUsPage() {
   return (
@@ -45,45 +46,19 @@ export default function PartnerWithUsPage() {
                   We would love to work together.
                 </p>
 
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <div className="mt-8">
                   <Link
                     href="/contact-us"
                     className="inline-flex h-12 items-center justify-center rounded-xl bg-[color:var(--lsi-bronze)] px-6 text-sm font-semibold text-white ring-1 ring-white/10 transition hover:brightness-110"
                   >
                     Become A Partner Today
                   </Link>
-                  <a
-                    href="#support"
-                    className="inline-flex h-12 items-center justify-center rounded-xl border border-black/15 bg-transparent px-6 text-sm font-semibold text-[color:var(--lsi-slate)] transition hover:bg-black/5"
-                  >
-                    Support the Mission
-                  </a>
                 </div>
               </div>
             </Reveal>
 
             <Reveal delay={0.08}>
-              <div
-                id="support"
-                className="rounded-3xl border border-black/10 bg-[color:var(--lsi-slate)] p-7 text-[color:var(--lsi-ivory)] shadow-[0_26px_80px_rgba(0,0,0,0.12)] ring-1 ring-white/10 sm:p-10"
-              >
-                <h2 className="font-heading text-4xl font-semibold sm:text-5xl">
-                  Support the Mission
-                </h2>
-                <div className="mt-4 h-px w-16 bg-[color:var(--lsi-terracotta)]/80" />
-                <p className="mt-6 max-w-3xl text-base leading-7 text-[color:var(--lsi-ivory)]/85 sm:text-[1.05rem] sm:leading-8">
-                  Your support helps us expand programs, reach new communities,
-                  train local leaders, and provide opportunities for young
-                  people across India.
-                </p>
-                <p className="mt-4 max-w-3xl text-base leading-7 text-[color:var(--lsi-ivory)]/85 sm:text-[1.05rem] sm:leading-8">
-                  Together, we can use the power of sport to build stronger
-                  communities and transform lives.
-                </p>
-                <p className="mt-6 text-sm font-semibold tracking-wide text-white/80">
-                  Donate • Partner • Volunteer
-                </p>
-              </div>
+              <SupportMissionSection />
             </Reveal>
 
             <Reveal delay={0.12}>

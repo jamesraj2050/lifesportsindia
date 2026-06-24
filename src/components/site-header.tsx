@@ -43,13 +43,13 @@ export function SiteHeader() {
           className="flex items-center gap-3"
           aria-label="Life Sports India"
         >
-          <span className="relative h-11 w-11 overflow-hidden rounded-md bg-transparent">
+          <span className="relative h-[66px] w-[66px] overflow-hidden rounded-md bg-transparent">
             <Image
               src="/brand/logo.png"
               alt="Life Sports India"
               fill
-              className="object-contain scale-[1.18]"
-              sizes="44px"
+              className="object-contain"
+              sizes="66px"
               priority
             />
           </span>

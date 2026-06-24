@@ -3,6 +3,7 @@ import Image from "next/image";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Reveal } from "@/components/reveal";
+import { AboutStrategySection } from "@/components/about/strategy-section";
 
 export default function AboutUsPage() {
   return (
@@ -28,25 +29,19 @@ export default function AboutUsPage() {
                 About Us
               </h1>
             </Reveal>
-            <Reveal delay={0.08}>
-              <p className="mt-4 max-w-2xl text-lg font-semibold text-[color:var(--lsi-ivory)]/90">
-                Developing Leaders . Strengthening Communities . Building
-                Character
-              </p>
-            </Reveal>
           </div>
         </section>
 
         <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
-          <div className="grid items-start gap-10 md:grid-cols-12">
+          <div className="grid gap-10 md:grid-cols-12 md:items-stretch">
             <div className="md:col-span-5">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl ring-1 ring-black/10">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl ring-1 ring-black/10 md:aspect-auto md:h-full">
                 <Image
                   src="/photos/about-split.jpg"
                   alt=""
                   fill
-                  className="object-cover"
-                  sizes="(min-width: 768px) 40vw, 100vw"
+                  className="object-cover md:scale-110"
+                  sizes="(min-width: 768px) 44vw, 100vw"
                 />
               </div>
             </div>
@@ -65,8 +60,16 @@ export default function AboutUsPage() {
                   development.
                 </p>
               </Reveal>
+              <Reveal delay={0.1}>
+                <p className="mt-4 text-base leading-7 text-black/75 sm:text-[1.05rem] sm:leading-8">
+                  Whether on a football field in Shillong, a basketball court in
+                  Bangalore, or a community gathering in Punjab, our mission
+                  remains the same: to see lives transformed through meaningful
+                  relationships and the universal language of sport.
+                </p>
+              </Reveal>
 
-              <div className="mt-10 grid gap-4 sm:grid-cols-2">
+              <div className="mt-10 grid gap-4">
                 {[
                   {
                     title: "Vision",
@@ -80,25 +83,15 @@ export default function AboutUsPage() {
                     title: "Values",
                     body: "We Engage • We Empower • We Encourage",
                   },
-                  {
-                    title: "Strategy",
-                    body: "Creating holistic growth and transformation through sports",
-                  },
                 ].map((card, idx) => (
                   <Reveal key={card.title} delay={0.1 + idx * 0.04}>
-                    <div className="group rounded-2xl bg-[color:var(--lsi-slate)] p-5 text-[color:var(--lsi-ivory)] shadow-[0_18px_50px_rgba(0,0,0,0.18)] ring-1 ring-white/10 transition-transform duration-300 hover:-translate-y-1">
-                      <div className="flex items-baseline justify-between">
-                        <h3 className="font-heading text-2xl font-semibold tracking-wide">
-                          {card.title.toUpperCase()}
-                        </h3>
-                        <span className="text-xs font-semibold tracking-[0.25em] text-white/60">
-                          LSI
-                        </span>
-                      </div>
-                      <p className="mt-3 text-sm leading-6 text-[color:var(--lsi-ivory)]/85">
+                    <div className="group rounded-2xl bg-[color:var(--lsi-slate)] p-5 text-[color:var(--lsi-ivory)] shadow-[0_18px_50px_rgba(0,0,0,0.18)] transition-transform duration-300 hover:-translate-y-1">
+                      <h3 className="font-heading text-2xl font-semibold tracking-wide">
+                        {card.title.toUpperCase()}
+                      </h3>
+                      <p className="mt-3 text-base leading-7 text-[color:var(--lsi-ivory)]/85">
                         {card.body}
                       </p>
-                      <div className="mt-4 h-px w-10 bg-[color:var(--lsi-terracotta)]/70 transition-all group-hover:w-16" />
                     </div>
                   </Reveal>
                 ))}
@@ -106,6 +99,8 @@ export default function AboutUsPage() {
             </div>
           </div>
         </section>
+
+        <AboutStrategySection />
       </main>
       <SiteFooter />
     </div>

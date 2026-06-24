@@ -13,11 +13,6 @@ export default function ContactPage() {
               Contact
             </h1>
           </Reveal>
-          <Reveal delay={0.08}>
-            <p className="mt-6 max-w-2xl text-base leading-7 text-black/75 sm:text-[1.05rem] sm:leading-8">
-              Design should feel premium and minimal.
-            </p>
-          </Reveal>
         </section>
 
         <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 sm:pb-24">
@@ -27,7 +22,6 @@ export default function ContactPage() {
                 <h2 className="font-heading text-4xl font-semibold text-[color:var(--lsi-slate)] sm:text-5xl">
                   Send Message
                 </h2>
-                <div className="mt-4 h-px w-16 bg-[color:var(--lsi-bronze)]/70" />
                 <form className="mt-8 grid gap-4">
                   <input
                     className="h-12 rounded-xl bg-white/60 px-4 text-sm ring-1 ring-black/10 placeholder:text-black/40 focus:outline-none focus:ring-2 focus:ring-[color:var(--lsi-terracotta)]"
@@ -60,7 +54,6 @@ export default function ContactPage() {
                 <h2 className="font-heading text-4xl font-semibold sm:text-5xl">
                   Information
                 </h2>
-                <div className="mt-4 h-px w-16 bg-[color:var(--lsi-terracotta)]/80" />
 
                 <div className="mt-8 space-y-5 text-sm text-[color:var(--lsi-ivory)]/85">
                   <div>

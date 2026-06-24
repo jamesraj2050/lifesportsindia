@@ -1,6 +1,8 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Reveal } from "@/components/reveal";
+import { ImpactEventCard } from "@/components/growing-impact/impact-event-card";
+import { growingImpactEvents } from "@/content/growing-impact-events";
 
 export default function GrowingImpactPage() {
   return (
@@ -43,17 +45,20 @@ export default function GrowingImpactPage() {
               </p>
             </div>
           </Reveal>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            {growingImpactEvents.map((event, idx) => (
+              <Reveal key={event.id} delay={0.06 + idx * 0.05}>
+                <ImpactEventCard image={event.image} caption={event.caption} />
+              </Reveal>
+            ))}
+          </div>
         </section>
 
         <section className="bg-[color:var(--lsi-slate)]">
           <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
             <Reveal>
-              <p className="text-xs font-semibold tracking-[0.3em] text-white/65">
-                NEXT
-              </p>
-            </Reveal>
-            <Reveal delay={0.06}>
-              <h2 className="mt-3 font-heading text-4xl font-semibold text-white sm:text-5xl">
+              <h2 className="font-heading text-4xl font-semibold text-white sm:text-5xl">
                 Future Initiatives
               </h2>
             </Reveal>
@@ -78,7 +83,6 @@ export default function GrowingImpactPage() {
                     <h3 className="font-heading text-3xl font-semibold text-[color:var(--lsi-ivory)]">
                       {item.title}
                     </h3>
-                    <div className="mt-4 h-px w-14 bg-[color:var(--lsi-terracotta)]/80" />
                     <p className="mt-5 text-sm leading-6 text-white/75 sm:text-[0.98rem] sm:leading-7">
                       {item.body}
                     </p>
