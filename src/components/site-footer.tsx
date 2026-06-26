@@ -159,7 +159,15 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 border-t border-white/10 pt-6 text-xs text-white/60">
-          Copyright © {new Date().getFullYear()} by Life Sports India.
+          Copyright{" "}
+          <Link
+            href="/admin"
+            className="text-white/60 no-underline transition hover:text-white/80"
+            aria-label="Admin"
+          >
+            ©
+          </Link>{" "}
+          {new Date().getFullYear()} by Life Sports India.
         </div>
       </div>
     </footer>
