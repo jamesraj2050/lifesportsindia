@@ -35,7 +35,6 @@ export function SupportMissionSection() {
       <h2 className="font-heading text-4xl font-semibold sm:text-5xl">
         Support the Mission
       </h2>
-      <div className="mt-4 h-px w-16 bg-[color:var(--lsi-terracotta)]/80" />
       <p className="mt-6 max-w-3xl text-base leading-7 text-[color:var(--lsi-ivory)]/85 sm:text-[1.05rem] sm:leading-8">
         Your support helps us expand programs, reach new communities, train local
         leaders, and provide opportunities for young people across India.

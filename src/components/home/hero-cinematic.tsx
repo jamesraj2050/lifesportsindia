@@ -210,7 +210,7 @@ export function HeroCinematicBackground({
         </motion.div>
       </AnimatePresence>
 
-      <div className="absolute inset-0 bg-[color:var(--lsi-slate)]/40" />
+      <div className="absolute inset-0 bg-[color:var(--lsi-slate)]/30" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/10" />
       <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[color:var(--lsi-ivory)]/85 to-transparent" />
 

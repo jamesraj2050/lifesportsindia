@@ -30,7 +30,7 @@ export default function GrowingImpactPage() {
               <h2 className="font-heading text-4xl font-semibold text-[color:var(--lsi-slate)] sm:text-5xl">
                 Recent Impact
               </h2>
-              <ul className="mt-6 grid gap-3 text-base text-black/75 sm:text-[1.05rem]">
+              <ul className="mt-6 list-outside list-disc space-y-3 pl-5 text-base text-black/75 sm:text-[1.05rem]">
                 <li>Football tournaments in Northeast India &amp; Punjab</li>
                 <li>
                   Leadership development workshops in Bangalore, Punjab &amp;
@@ -38,11 +38,11 @@ export default function GrowingImpactPage() {
                 </li>
                 <li>Partnerships with local sports leaders and organizations</li>
                 <li>Visits from international athletes and sports ambassadors</li>
+                <li>
+                  Every event is designed not only to improve sporting skills but
+                  also to strengthen communities and develop future leaders.
+                </li>
               </ul>
-              <p className="mt-6 max-w-3xl text-base leading-7 text-black/75 sm:text-[1.05rem] sm:leading-8">
-                Every event is designed not only to improve sporting skills but
-                also to strengthen communities and develop future leaders.
-              </p>
             </div>
           </Reveal>
 

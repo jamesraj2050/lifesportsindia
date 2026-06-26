@@ -63,7 +63,7 @@ export function AboutStrategySection() {
                   <h3 className="mt-5 font-heading text-2xl font-semibold tracking-wide text-white">
                     {pillar.title.toUpperCase()}
                   </h3>
-                  <ul className="mt-5 space-y-3 text-left">
+                  <ul className="mx-auto mt-5 w-fit max-w-[14rem] list-outside list-disc space-y-3 pl-5 text-left">
                     {pillar.items.map((item) => (
                       <li
                         key={item}

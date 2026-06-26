@@ -48,17 +48,17 @@ export default function GalleryPage() {
 
         <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 sm:pb-24">
           <GallerySection
-            title="Football Gallery"
+            title="Football"
             images={gallery.football}
             priorityCount={3}
           />
           <GallerySection
-            title="Basketball Gallery"
+            title="Basketball"
             images={gallery.basketball}
             revealDelay={0.04}
           />
           <GallerySection
-            title="Women in Sports Gallery"
+            title="Women in Sports"
             images={gallery.women}
             revealDelay={0.08}
           />

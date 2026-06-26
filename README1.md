@@ -1,8 +1,8 @@
-# Life Sports India — UX Redesign (Work Summary)
+# Life Sports India — Project Handoff (UX + Database)
 
 Handoff document for agents and developers working in this repo.
 
-**Scope:** UX redesign only (layout, typography, motion, imagery, spacing). Page names, navigation, and messaging are preserved unless the user explicitly provided replacement copy.
+**Scope:** UX redesign (layout, typography, motion, imagery, spacing) plus Turso-backed newsletter, contact forms, and admin panel. Page names, navigation, and messaging are preserved unless the user explicitly provided replacement copy.
 
 ---
 
@@ -16,32 +16,56 @@ Handoff document for agents and developers working in this repo.
 | **Growing Impact** | Recent Impact preserved; 4 event highlight cards with photos; Future Initiatives copy expanded |
 | **Partner With Us** | Support Mission section component; cleaned headings (no bronze underlines) |
 | **Gallery** | Masonry layout; desktop hover color; mobile center-in-view color sync |
-| **Contact** | Premium form UI (Name, Email, Message); removed placeholder intro copy |
+| **Contact** | Form wired to Turso (`POST /api/contact`); full message history in admin |
+| **Newsletter** | Footer form wired to Turso (`POST /api/newsletter`); unsubscribe link flow |
+| **Admin** | `/admin` login; newsletter export + contact messages (not in public nav) |
 | **Brand** | LSI color tokens, Nunito Sans + Oswald, customer circular logo in header |
-| **Tooling** | shadcn UI, Tailwind v4, production build passes, ESLint skipped at build time |
-| **Deploy (Phase 0)** | UX work committed, merged to `main`, pushed to GitHub; live on Vercel at `lifesportsindia.vercel.app` |
-| **Database (Phase 1)** | Turso + Drizzle: `contacts` + `contact_messages`; newsletter, contact API, unsubscribe, `/admin` |
+| **Tooling** | shadcn UI, Tailwind v4, Drizzle ORM, production build passes |
+| **Deploy** | Merged to `main`, live on **Vercel** — https://lifesportsindia.org |
 
 ---
 
-## Current state (Jun 24, 2026)
+## Current state (production live)
 
 | Item | Value |
 |------|--------|
 | **Repo path** | `/Users/apple/Documents/AI Business related/LifesportsIndia/web` |
 | **Git remote** | https://github.com/jamesraj2050/lifesportsindia |
-| **Feature branch** | `final-design-with-database` (Phase 1 — DB + admin) |
-| **Base branch** | `main` (UX redesign merged) |
+| **Active branch** | `main` (all phases merged) |
+| **Latest commit** | `f3636a7` — *Add Turso database, newsletter, contact forms, and admin panel.* |
 | **Framework** | Next.js **15.5.19**, React 19, TypeScript, App Router |
 | **Database** | Turso (libSQL) via Drizzle ORM |
-| **Build** | `npm run build` succeeds (20 routes incl. admin + API) |
-| **Live (Vercel)** | https://lifesportsindia.vercel.app (merge branch to deploy Phase 1) |
-| **Admin URL** | `/admin` (not in public nav; `noindex`) |
-| **Secrets** | `.env.local` — never committed; see `.env.example` |
+| **Hosting** | Vercel (auto-deploy on push to `main`) |
+| **Production URL** | https://lifesportsindia.org |
+| **Vercel URL** | https://lifesportsindia.vercel.app (alias) |
+| **Secrets** | `.env.local` locally + Vercel env vars — never committed; see `.env.example` |
+
+### Production URLs
+
+| Page | URL |
+|------|-----|
+| Home | https://lifesportsindia.org |
+| Contact | https://lifesportsindia.org/contact-us |
+| Admin login | https://lifesportsindia.org/admin |
+| Newsletter subscribers | https://lifesportsindia.org/admin/newsletter |
+| Contact messages | https://lifesportsindia.org/admin/messages |
+| Unsubscribe | https://lifesportsindia.org/unsubscribe?token=TOKEN |
+
+### Local development URLs
+
+| Page | URL |
+|------|-----|
+| Site | http://localhost:3000 |
+| Admin login | http://localhost:3000/admin |
+| Newsletter subscribers | http://localhost:3000/admin/newsletter |
+| Contact messages | http://localhost:3000/admin/messages |
+
+Run `npm run dev` from the `web/` folder. Requires `.env.local` with Turso + admin vars.
 
 ### Commit history on `main`
 
 ```
+f3636a7 Add Turso database, newsletter, contact forms, and admin panel.
 476854e UX redesign: cinematic hero, updated pages, and customer copy.
 0e2c0c2 Add mobile center-in-view color for gallery
 dea7fa6 Update Life Sports India website
@@ -82,15 +106,15 @@ git push origin main
 ### What Phase 0 accomplished
 
 - 23 files committed on `customer-update1`, fast-forward merged into `main`
-- Pushed to GitHub → Vercel auto-deploy triggered (project already linked)
-- Verified new content on https://lifesportsindia.vercel.app (wordmark, About Strategy, Shillong copy, etc.)
-- **Action still needed:** point `lifesportsindia.org` DNS to Vercel (Vercel project → Settings → Domains)
+- Pushed to GitHub → Vercel auto-deploy triggered
+- Custom domain **lifesportsindia.org** connected and serving the Next.js site
 
 ### Smoke-test after deploy
 
 ```bash
-curl -sL "https://lifesportsindia.vercel.app/" | grep -oE 'LIFE SPORTS INDIA|Developing Leaders' | sort -u
-curl -sL "https://lifesportsindia.vercel.app/about-us" | grep -oE 'OUR STRATEGY|Shillong' | head -3
+curl -sL "https://lifesportsindia.org/" | grep -oE 'LIFE SPORTS INDIA|TRANSFORMING' | head -1
+curl -sL "https://lifesportsindia.org/about-us" | grep -oE 'OUR STRATEGY|Shillong' | head -3
+curl -sI "https://lifesportsindia.org/admin" | grep -iE 'HTTP|x-robots'
 ```
 
 ---
@@ -101,7 +125,7 @@ curl -sL "https://lifesportsindia.vercel.app/about-us" | grep -oE 'OUR STRATEGY|
 
 | File | Change |
 |------|--------|
-| `package.json` | Next 15, Drizzle/Turso deps added (DB not wired yet), UX libraries |
+| `package.json` | Next 15, Drizzle/Turso, UX libraries; `db:push` / `db:studio` scripts |
 | `package-lock.json` | Lockfile updates |
 | `next.config.ts` → `next.config.js` | Migrated to JS config; `eslint.ignoreDuringBuilds: true` |
 | `components.json` | shadcn UI config |
@@ -122,14 +146,14 @@ curl -sL "https://lifesportsindia.vercel.app/about-us" | grep -oE 'OUR STRATEGY|
 | `growing-impact/page.tsx` | 4 impact event cards, Future Initiatives, no underlines |
 | `gallery/page.tsx` | Masonry gallery page |
 | `partner-with-us/page.tsx` | Support Mission section, no heading underlines |
-| `contact-us/page.tsx` | Contact form UI, removed placeholder intro + underlines |
+| `contact-us/page.tsx` | Contact form wired to `POST /api/contact` via `contact-form.tsx` |
 
 ### Components (`src/components/`)
 
 | File | Change |
 |------|--------|
 | `site-header.tsx` | Sticky header, larger logo (66px), menu hover slate+white |
-| `site-footer.tsx` | Dark footer, nav, newsletter form (UI only) |
+| `site-footer.tsx` | Dark footer, nav, newsletter form wired to `POST /api/newsletter` |
 | `site-nav.ts` | Nav link labels (unchanged IA) |
 | `smooth-scroll.tsx` | Lenis + resize on load/resize/ResizeObserver |
 | `reveal.tsx` | Framer Motion scroll reveals |
@@ -237,14 +261,13 @@ Navigation labels and order preserved (admin **not** in public nav):
 
 ### Contact Us
 
-- Name / Email / Message form (UI only — not saved to DB yet)
-- Removed *“Design should feel premium and minimal.”* intro
-- Removed underlines under section headings
+- Name / Email / Message form → saves to Turso (`contacts` + `contact_messages`)
+- Removed placeholder intro copy; removed underlines under section headings
 
 ### Header + footer
 
 - **Header:** transparent on hero → sticky blur; logo 66px; nav hover slate bg + white text
-- **Footer:** newsletter field (UI only), contact links, dark slate styling
+- **Footer:** newsletter subscribe (Turso), contact links, dark slate styling
 
 ---
 
@@ -363,40 +386,35 @@ git revert <commit-hash>
 
 ---
 
-## Phase 1 — Database + admin (implemented on `final-design-with-database`)
+## Phase 1 — Database + admin (merged to `main`, deployed)
 
-### Branch + deploy commands
+### Deploy commands (completed)
 
 ```bash
 cd "/Users/apple/Documents/AI Business related/LifesportsIndia/web"
 
-# Create branch (Git disallows spaces — use hyphens)
-git checkout main
-git pull origin main
-git checkout -b final-design-with-database
-
-# Apply schema to Turso (requires .env.local)
+# Apply schema to Turso (one-time or after schema changes)
 set -a && source .env.local && set +a
 npm run db:push
 
-# Build and push
-npm run build
-git add -A
-git commit -m "Add Turso database, newsletter, contact forms, and admin panel."
-git push -u origin final-design-with-database
+# Merge feature branch and push (done)
+git checkout main
+git pull origin main
+git merge final-design-with-database
+git push origin main
 ```
 
-Merge to `main` when ready; set env vars in **Vercel → Settings → Environment Variables** before production deploy.
+Vercel auto-deploys `main`. Env vars must be set in **Vercel → Settings → Environment Variables** (same keys as `.env.local`).
 
 ### Environment variables
 
-Copy `.env.example` → `.env.local`. Required keys:
+Copy [`.env.example`](.env.example) → `.env.local` (local) and mirror in Vercel (production):
 
 ```
 DATABASE_URL=          # Turso database URL (or TURSO_DATABASE_URL)
 DATABASE_AUTH_TOKEN=   # Turso auth token (or TURSO_AUTH_TOKEN)
 ADMIN_USERNAME=Admin
-ADMIN_PASSWORD=        # e.g. Lifesportsindia@123
+ADMIN_PASSWORD=        # set in Vercel only — never commit
 ADMIN_SESSION_SECRET=  # random string (openssl rand -base64 32)
 ```
 
@@ -474,6 +492,27 @@ Unsubscribe: https://lifesportsindia.org/unsubscribe?token=UNIQUE_TOKEN_PER_SUBS
 - Contact form **never** changes `Subscription`
 - Unsubscribe link sets `Subscription=No`; user may re-subscribe via footer later
 - Admin export includes only `Subscription=Yes` rows
+
+---
+
+## Next steps (minor modifications)
+
+> **Status:** Production is live at https://lifesportsindia.org. Use this section to track upcoming small UX/content tweaks before the next commit.
+
+- [ ] _(add items here as you plan minor changes)_
+
+**Workflow for minor changes:**
+
+```bash
+cd "/Users/apple/Documents/AI Business related/LifesportsIndia/web"
+git checkout main
+git pull origin main
+# edit files
+npm run dev          # test at http://localhost:3000
+npm run build        # verify production build
+git add -A && git commit -m "Describe minor change."
+git push origin main # Vercel auto-deploys
+```
 
 ---
 

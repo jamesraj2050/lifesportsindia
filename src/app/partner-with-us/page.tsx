@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -27,20 +28,25 @@ export default function PartnerWithUsPage() {
           <div className="grid gap-6">
             <Reveal>
               <div className="rounded-3xl border border-black/10 bg-[color:rgb(255_255_255_/_.28)] p-7 shadow-[0_26px_80px_rgba(0,0,0,0.08)] backdrop-blur-sm sm:p-10">
-                <h2 className="font-heading text-4xl font-semibold text-[color:var(--lsi-slate)] sm:text-5xl">
-                  Partner With Us
-                </h2>
-                <p className="mt-6 text-base leading-7 text-black/75 sm:text-[1.05rem] sm:leading-8">
+                <p className="text-lg font-semibold leading-7 text-[color:var(--lsi-slate)] sm:text-xl sm:leading-8">
                   Whether you are:
                 </p>
-                <ul className="mt-4 grid gap-2 text-base text-black/75 sm:text-[1.05rem]">
-                  <li>A corporate organization seeking CSR opportunities</li>
-                  <li>A foundation looking to invest in youth development</li>
-                  <li>A sports organization seeking strategic partnerships</li>
-                  <li>
-                    An educational institution interested in student engagement
-                  </li>
-                  <li>An individual passionate about community impact</li>
+                <ul className="mt-4 space-y-3 text-base text-black/75 sm:text-[1.05rem]">
+                  {[
+                    "A corporate organization seeking CSR opportunities",
+                    "A foundation looking to invest in youth development",
+                    "A sports organization seeking strategic partnerships",
+                    "An educational institution interested in student engagement",
+                    "An individual passionate about community impact",
+                  ].map((item) => (
+                    <li key={item} className="flex items-start gap-2.5">
+                      <ChevronRight
+                        className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--lsi-bronze)]/75"
+                        aria-hidden
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
                 </ul>
                 <p className="mt-6 text-base leading-7 text-black/75 sm:text-[1.05rem] sm:leading-8">
                   We would love to work together.
