@@ -63,6 +63,6 @@ export const gallery = {
     reorder: balanceMasonryOrder,
   }),
   basketball: listImages("gallery/basketball"),
-  women: listImages("gallery/women"),
+  workshops: listImages("gallery/workshops"),
 } as const;
 
