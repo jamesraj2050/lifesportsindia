@@ -58,9 +58,14 @@ export default function GalleryPage() {
             revealDelay={0.04}
           />
           <GallerySection
-            title="Workshops"
-            images={gallery.workshops}
+            title="Wrestling"
+            images={gallery.wrestling}
             revealDelay={0.08}
+          />
+          <GallerySection
+            title="Workshop"
+            images={gallery.workshops}
+            revealDelay={0.12}
           />
         </section>
       </main>
