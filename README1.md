@@ -16,7 +16,7 @@ Handoff document for agents and developers working in this repo.
 | **About Us** | VMV + OUR STRATEGY cards with **disc bullets** on Training / Resources / Events lists |
 | **Growing Impact** | Recent Impact as **5 bullet points**; 4 event photo cards; Future Initiatives |
 | **Partner With Us** | “Whether you are:” bold; chevron bullets; Support Mission (no underline); Stay Connected |
-| **Gallery** | **Football**, **Basketball**, **Workshops** (4 photos); masonry + mobile color sync |
+| **Gallery** | **Football**, **Basketball**, **Wrestling**, **Workshop** (12 photos); masonry + mobile color sync |
 | **Contact** | Form wired to Turso; full message history in admin |
 | **Newsletter** | Footer form wired to Turso; unsubscribe link flow |
 | **Admin** | `/admin` login; newsletter export + messages; **© footer link** + **Home icons** on admin pages |
@@ -31,11 +31,12 @@ Handoff document for agents and developers working in this repo.
 | **Repo path** | `/Users/apple/Documents/AI Business related/LifesportsIndia/web` |
 | **Git remote** | https://github.com/jamesraj2050/lifesportsindia |
 | **Branches** | **`main` only** (local + `origin/main`; feature branches cleaned up) |
-| **Latest commit** | `1813753` — *Replace Women in Sports gallery with Workshops section.* |
+| **Latest commit** | `94a043b` — *Add Wrestling gallery and Workshop photos 5–12.* (2026-09-09) |
 | **Framework** | Next.js **15.5.19**, React 19, TypeScript, App Router |
 | **Database** | Turso (libSQL) via Drizzle ORM |
 | **Hosting** | Vercel (auto-deploy on push to `main`) |
 | **Production URL** | https://www.lifesportsindia.org (`lifesportsindia.org` redirects to www) |
+| **Vercel preview** | https://lifesportsindia.vercel.app |
 | **Secrets** | `.env.local` locally + Vercel env vars — never committed; see `.env.example` |
 
 ### Production URLs
@@ -64,6 +65,10 @@ Run `npm run dev` from the `web/` folder. Requires `.env.local` with Turso + adm
 ### Commit history on `main`
 
 ```
+94a043b Add Wrestling gallery and Workshop photos 5–12.
+e5207c1 Downscale oversized gallery originals to 2560px.
+0725af4 Exclude public/ from serverless function tracing.
+63fcc84 Add basketball gallery photos and improve color-on-scroll.
 1813753 Replace Women in Sports gallery with Workshops section.
 2ef84fa Final touch: mosaic, content polish, hero overlay, and admin nav.
 737ad5f Add discreet admin link on footer © and Home icons on admin pages.
@@ -77,20 +82,87 @@ dea7fa6 Update Life Sports India website
 
 ---
 
+## Session log — Gallery Wrestling + Workshop 5–12 (2026-09-09)
+
+### What changed
+
+| Item | Detail |
+|------|--------|
+| **Wrestling** | New gallery heading below Basketball; 18 images from `public/gallery/Wrestling/` |
+| **Workshop** | Heading renamed **Workshops** → **Workshop**; added `Workshop-5` … `Workshop-12` (12 total with existing 1–4) |
+| **Sort** | Numeric filename order (`1`→`N`; `Workshop-N`; prefer `11.jpg` before `11 (2).jpg`) |
+| **Typo fix** | Renamed `Worskshop-7.jpeg` → `Workshop-7.jpeg` |
+
+### Commands run
+
+```bash
+# Local preview
+cd "/Users/apple/Documents/AI Business related/LifesportsIndia/web"
+npm run dev
+# → http://localhost:3000  (gallery: http://localhost:3000/gallery)
+
+# Downscale oversized Wrestling originals (longest side → 2560px)
+# Files resized: 11.jpg, 11 (2).jpg, 12.jpg, 6.jpeg, 8.jpg
+sips -Z 2560 "public/gallery/Wrestling/<file>"
+
+# Fix Workshop-7 filename typo
+mv "public/gallery/workshops/Worskshop-7.jpeg" "public/gallery/workshops/Workshop-7.jpeg"
+
+# Commit + push (triggers Vercel production deploy)
+git add src/app/gallery/page.tsx src/content/gallery.ts \
+  public/gallery/Wrestling \
+  public/gallery/workshops/Workshop-{5,6,7,8,9,10,11,12}.jpeg
+git commit -m "Add Wrestling gallery and Workshop photos 5–12."
+git push origin main
+```
+
+### Files affected
+
+| Path | Change |
+|------|--------|
+| `src/app/gallery/page.tsx` | Added **Wrestling** section; renamed heading to **Workshop** |
+| `src/content/gallery.ts` | Added `gallery.wrestling`; numeric sort for `N.*` and `Workshop-N.*` |
+| `public/gallery/Wrestling/*` | **18** new images (oversized ones downscaled to 2560px) |
+| `public/gallery/workshops/Workshop-5.jpeg` … `Workshop-12.jpeg` | **8** new workshop images |
+| `public/gallery/workshops/Workshop-7.jpeg` | Renamed from `Worskshop-7.jpeg` |
+
+### GitHub + Vercel deployment
+
+| Item | Value |
+|------|--------|
+| **GitHub repo** | https://github.com/jamesraj2050/lifesportsindia |
+| **Branch** | `main` |
+| **Commit** | `94a043b` (`94a043b9481f808cbbbb8f6bc05f82df1cc23bb1`) |
+| **Message** | Add Wrestling gallery and Workshop photos 5–12. |
+| **Pushed** | `e5207c1..94a043b  main → main` (2026-09-09 ~17:25 AEST) |
+| **Deploy trigger** | Vercel auto-deploy on push to `main` (no manual CLI deploy) |
+| **Production** | https://www.lifesportsindia.org |
+| **Gallery live** | https://www.lifesportsindia.org/gallery |
+| **Vercel app URL** | https://lifesportsindia.vercel.app |
+
+Verify after deploy:
+
+```bash
+curl -sL "https://www.lifesportsindia.org/gallery" | grep -oE 'Wrestling|Workshop|Football|Basketball' | sort -u
+```
+
+---
+
 ## Gallery sections (current)
 
 | Section | Folder | Notes |
 |---------|--------|-------|
 | **Football** | `public/gallery/football/` | Auto-loaded via `gallery.ts`; masonry reorder for layout |
 | **Basketball** | `public/gallery/basketball/` | Auto-loaded |
-| **Workshops** | `public/gallery/workshops/` | 4 images: `workshop-1.jpg` … `workshop-4.jpg` |
+| **Wrestling** | `public/gallery/Wrestling/` | 18 images; numeric filename order |
+| **Workshop** | `public/gallery/workshops/` | 12 images: `workshop-1.jpg` … `workshop-4.jpg` + `Workshop-5.jpeg` … `Workshop-12.jpeg` |
 
 **Removed from site:** “Women in Sports” section (legacy folder `public/gallery/women/` may still exist on disk but is **not referenced**).
 
 **Code:**
 
-- [`src/content/gallery.ts`](src/content/gallery.ts) — `gallery.workshops` replaces former `gallery.women`
-- [`src/app/gallery/page.tsx`](src/app/gallery/page.tsx) — third section title **Workshops**
+- [`src/content/gallery.ts`](src/content/gallery.ts) — `gallery.football` / `basketball` / `wrestling` / `workshops`
+- [`src/app/gallery/page.tsx`](src/app/gallery/page.tsx) — section order: Football → Basketball → Wrestling → Workshop
 
 ---
 
@@ -180,7 +252,7 @@ https://www.lifesportsindia.org/unsubscribe?token=UNIQUE_TOKEN_PER_SUBSCRIBER
 
 ### Gallery
 
-- **Football** → **Basketball** → **Workshops**
+- **Football** → **Basketball** → **Wrestling** → **Workshop**
 - Masonry: `gallery-masonry.tsx`; content: `gallery.ts`
 
 ### Contact Us
@@ -198,8 +270,8 @@ https://www.lifesportsindia.org/unsubscribe?token=UNIQUE_TOKEN_PER_SUBSCRIBER
 | File | Notes |
 |------|-------|
 | `src/app/page.tsx` | Home mosaic |
-| `src/app/gallery/page.tsx` | Football / Basketball / Workshops |
-| `src/content/gallery.ts` | `workshops` image loader |
+| `src/app/gallery/page.tsx` | Football / Basketball / Wrestling / Workshop |
+| `src/content/gallery.ts` | Image loaders + numeric sort |
 | `src/components/home/hero-cinematic.tsx` | Hero overlay 30% |
 | `src/components/site-footer.tsx` | Newsletter + © admin |
 | `src/app/admin/**` | Admin UI |
@@ -211,7 +283,9 @@ https://www.lifesportsindia.org/unsubscribe?token=UNIQUE_TOKEN_PER_SUBSCRIBER
 |------|-------|
 | `public/gallery/football/*` | Football gallery |
 | `public/gallery/basketball/*` | Basketball gallery |
-| `public/gallery/workshops/workshop-1.jpg` … `workshop-4.jpg` | Workshops gallery |
+| `public/gallery/Wrestling/*` | Wrestling gallery (18 images) |
+| `public/gallery/workshops/workshop-1.jpg` … `workshop-4.jpg` | Workshop 1–4 |
+| `public/gallery/workshops/Workshop-5.jpeg` … `Workshop-12.jpeg` | Workshop 5–12 |
 | `public/photos/mosaic-*.jpg`, `impact/*` | Home mosaic |
 
 ---
@@ -239,13 +313,15 @@ git push origin main    # Vercel auto-deploys production
 ### Add gallery images
 
 ```bash
-# Drop new images into the appropriate folder, then rebuild/redeploy:
+# Drop new images into the appropriate folder, then commit + push:
 public/gallery/football/
 public/gallery/basketball/
+public/gallery/Wrestling/
 public/gallery/workshops/
 ```
 
-Images are picked up at build time by `src/content/gallery.ts` (`readdirSync`).
+Images are picked up at build time by `src/content/gallery.ts` (`readdirSync`).  
+If longest side > 2560px, downscale first: `sips -Z 2560 path/to/image.jpg`
 
 ### Database push
 
@@ -257,7 +333,7 @@ npm run db:push
 ### Verify production deploy
 
 ```bash
-curl -sL "https://www.lifesportsindia.org/gallery" | grep -oE 'Workshops|Football|Basketball' | sort -u
+curl -sL "https://www.lifesportsindia.org/gallery" | grep -oE 'Wrestling|Workshop|Football|Basketball' | sort -u
 ```
 
 ---
